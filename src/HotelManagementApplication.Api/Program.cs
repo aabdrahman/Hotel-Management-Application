@@ -1,4 +1,17 @@
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+//Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(path: "Logs/log-.txt", 
+                    fileSizeLimitBytes: 10_000_000, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, buffered: true, 
+                    outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss}||{Level:u3}] || [{ClassName}].[{MethodName}] - {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
 
 // Add services to the container.
 
